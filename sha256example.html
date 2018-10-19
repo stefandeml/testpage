@@ -1,0 +1,246 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Proofing a Hash Pre-Image - ZoKrates</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body class="light">
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">var path_to_root = "";</script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { } 
+            if (theme === null || theme === undefined) { theme = 'light'; }
+            document.body.className = theme;
+            document.querySelector('html').className = theme + ' js';
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <ol class="chapter"><li><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><a href="gettingstarted.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><a href="sha256example.html" class="active"><strong aria-hidden="true">3.</strong> Proofing a Hash Pre-Image</a></li><li><a href="reference/index.html"><strong aria-hidden="true">4.</strong> ZoKrates Reference</a></li><li><ol class="section"><li><a href="reference/grammar.html"><strong aria-hidden="true">4.1.</strong> Grammar</a></li><li><a href="reference/cli.html"><strong aria-hidden="true">4.2.</strong> CLI</a></li><li><a href="reference/gadgets.html"><strong aria-hidden="true">4.3.</strong> Gadgets</a></li><li><a href="reference/verification.html"><strong aria-hidden="true">4.4.</strong> Verification</a></li></ol></li></ol>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div id="menu-bar-sticky-container">
+                        <div class="left-buttons">
+                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                                <i class="fa fa-paint-brush"></i>
+                            </button>
+                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                                <li role="none"><button role="menuitem" class="theme" id="light">Light <span class="default">(default)</span></button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            </ul>
+                            
+                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            
+                        </div>
+
+                        <h1 class="menu-title">ZoKrates</h1> 
+
+                        <div class="right-buttons">
+                            <a href="print.html" title="Print this book" aria-label="Print this book">
+                                <i id="print-button" class="fa fa-print"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <a class="header" href="#proofing-a-hash-pre-image" id="proofing-a-hash-pre-image"><h1>Proofing a Hash Pre-Image</h1></a>
+<p>Let’s jump into ZoKrates by working through a hands-on project together! This chapter introduces you to the basic features of ZoKrates and to how to use zkSNARKs in a real-world example.</p>
+<p>We’ll implement a problem that's very typical in blockchain use-cases: proving the knowledge of a pre-image for a given hash digest. Here’s how it works:
+//TODO: End2end example of Ethereum SHA256 including solidity and python example</p>
+<p>This example creates the equivalent output as the following solidity code:</p>
+<pre><code class="language-s">pragma solidity ^0.4.24;
+contract SHA256Test {
+        event Success(
+        bytes32 indexed _id
+    );
+
+    function calc_sha() public returns (bytes32)  {
+        bytes32 a = 0x0;
+        bytes32 b = 0x5;
+
+        bytes32 result = sha256(a,b);
+        emit Success(result);
+        return result;
+    }
+}
+</code></pre>
+<p>Event is being emitted that shows:
+<code>bytes32: 0xc6481e22c5ff4164af680b8cfaa5e8ed3120eeff89c4f307c4a6faaae059ce10</code></p>
+<p>Zokrates code:</p>
+<pre><code class="language-zokrates">def main(field a) -&gt; (field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field, field):
+    o255, o254, o253, o252, o251, o250, o249, o248, o247, o246, o245, o244, o243, o242, o241, o240, o239, o238, o237, o236, o235, o234, o233, o232, o231, o230, o229, o228, o227, o226, o225, o224, o223, o222, o221, o220, o219, o218, o217, o216, o215, o214, o213, o212, o211, o210, o209, o208, o207, o206, o205, o204, o203, o202, o201, o200, o199, o198, o197, o196, o195, o194, o193, o192, o191, o190, o189, o188, o187, o186, o185, o184, o183, o182, o181, o180, o179, o178, o177, o176, o175, o174, o173, o172, o171, o170, o169, o168, o167, o166, o165, o164, o163, o162, o161, o160, o159, o158, o157, o156, o155, o154, o153, o152, o151, o150, o149, o148, o147, o146, o145, o144, o143, o142, o141, o140, o139, o138, o137, o136, o135, o134, o133, o132, o131, o130, o129, o128, o127, o126, o125, o124, o123, o122, o121, o120, o119, o118, o117, o116, o115, o114, o113, o112, o111, o110, o109, o108, o107, o106, o105, o104, o103, o102, o101, o100, o99, o98, o97, o96, o95, o94, o93, o92, o91, o90, o89, o88, o87, o86, o85, o84, o83, o82, o81, o80, o79, o78, o77, o76, o75, o74, o73, o72, o71, o70, o69, o68, o67, o66, o65, o64, o63, o62, o61, o60, o59, o58, o57, o56, o55, o54, o53, o52, o51, o50, o49, o48, o47, o46, o45, o44, o43, o42, o41, o40, o39, o38, o37, o36, o35, o34, o33, o32, o31, o30, o29, o28, o27, o26, o25, o24, o23, o22, o21, o20, o19, o18, o17, o16, o15, o14, o13, o12, o11, o10, o9, o8, o7, o6, o5, o4, o3, o2, o1, o0 = ethSha256libsnark(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1)
+    return o255, o254, o253, o252, o251, o250, o249, o248, o247, o246, o245, o244, o243, o242, o241, o240, o239, o238, o237, o236, o235, o234, o233, o232, o231, o230, o229, o228, o227, o226, o225, o224, o223, o222, o221, o220, o219, o218, o217, o216, o215, o214, o213, o212, o211, o210, o209, o208, o207, o206, o205, o204, o203, o202, o201, o200, o199, o198, o197, o196, o195, o194, o193, o192, o191, o190, o189, o188, o187, o186, o185, o184, o183, o182, o181, o180, o179, o178, o177, o176, o175, o174, o173, o172, o171, o170, o169, o168, o167, o166, o165, o164, o163, o162, o161, o160, o159, o158, o157, o156, o155, o154, o153, o152, o151, o150, o149, o148, o147, o146, o145, o144, o143, o142, o141, o140, o139, o138, o137, o136, o135, o134, o133, o132, o131, o130, o129, o128, o127, o126, o125, o124, o123, o122, o121, o120, o119, o118, o117, o116, o115, o114, o113, o112, o111, o110, o109, o108, o107, o106, o105, o104, o103, o102, o101, o100, o99, o98, o97, o96, o95, o94, o93, o92, o91, o90, o89, o88, o87, o86, o85, o84, o83, o82, o81, o80, o79, o78, o77, o76, o75, o74, o73, o72, o71, o70, o69, o68, o67, o66, o65, o64, o63, o62, o61, o60, o59, o58, o57, o56, o55, o54, o53, o52, o51, o50, o49, o48, o47, o46, o45, o44, o43, o42, o41, o40, o39, o38, o37, o36, o35, o34, o33, o32, o31, o30, o29, o28, o27, o26, o25, o24, o23, o22, o21, o20, o19, o18, o17, o16, o15, o14, o13, o12, o11, o10, o9, o8, o7, o6, o5, o4, o3, o2, o1, o0
+
+</code></pre>
+<p>Python code:</p>
+<pre><code class="language-py">import pprint
+import hashlib 
+
+test = bytes.fromhex('00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 05')
+
+hashlib.sha256(test).hexdigest()
+</code></pre>
+<p><code>'c6481e22c5ff4164af680b8cfaa5e8ed3120eeff89c4f307c4a6faaae059ce10'</code>
+Same output as we get from the EVM.</p>
+<p>Let's now compare this to the witness we get from ZoKrates.</p>
+<pre><code class="language-py">bin(0xc6481e22c5ff4164af680b8cfaa5e8ed3120eeff89c4f307c4a6faaae059ce10)
+</code></pre>
+<p><code>'0b1100011001001000000111100010001011000101111111110100000101100100101011110110100000001011100011001111101010100101111010001110110100110001001000001110111011111111100010011100010011110011000001111100010010100110111110101010101011100000010110011100111000010000'</code></p>
+<p>Looking at the output of the witness file</p>
+<pre><code class="language-sh">grep ...
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="gettingstarted.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="reference/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a href="gettingstarted.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="reference/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>
