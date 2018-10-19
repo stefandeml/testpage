@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Introduction - ZoKrates</title>
+        <title>Verification - ZoKrates</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -72,7 +72,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><a href="grammar.html"><strong aria-hidden="true">2.</strong> Grammar</a></li><li><a href="cli.html"><strong aria-hidden="true">3.</strong> CLI</a></li><li><a href="verification.html"><strong aria-hidden="true">4.</strong> Verification</a></li></ol>
+            <ol class="chapter"><li><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><a href="grammar.html"><strong aria-hidden="true">2.</strong> Grammar</a></li><li><a href="cli.html"><strong aria-hidden="true">3.</strong> CLI</a></li><li><a href="verification.html" class="active"><strong aria-hidden="true">4.</strong> Verification</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -136,19 +136,21 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="#introduction" id="introduction"><h1>Introduction</h1></a>
-<p>Welcome to the ZoKrates documentation, here's some ZoKrates code:</p>
-<pre><code class="language-zokrates">def main() -&gt; (field):
-    return 42
+                        <a class="header" href="#verification" id="verification"><h1>Verification</h1></a>
+<p>Passed to the verifier contract, this proof can be checked.
+For example, using <code>web3</code>, a call would look like the following:</p>
+<pre><code>Verifier.at(&lt;verifier contract address&gt;).verifyTx(A, A_p, B, B_p, C, C_p, H, K, [...publicInputs, ...outputs])
 </code></pre>
-<p>And here is some invalid ZoKrates code:</p>
-<pre><code class="language-zokrates">🦓
-</code></pre>
+<p>Where <code>A, ..., K</code> are defined as above (adding brackets and quotes: <code>A = [&quot;0x123&quot;, &quot;0x345&quot;]</code>), <code>publicInputs</code> are the public inputs supplied to witness generation and <code>outputs</code> are the results of the computation.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="cli.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
                         
 
                         
@@ -159,6 +161,10 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a href="cli.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
                 
 
                 
