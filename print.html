@@ -72,7 +72,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><a href="gettingstarted.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><a href="sha256example.html"><strong aria-hidden="true">3.</strong> Proofing a Hash Pre-Image</a></li><li><a href="reference/index.html"><strong aria-hidden="true">4.</strong> ZoKrates Reference</a></li><li><ol class="section"><li><a href="reference/grammar.html"><strong aria-hidden="true">4.1.</strong> Grammar</a></li><li><a href="reference/cli.html"><strong aria-hidden="true">4.2.</strong> CLI</a></li><li><a href="reference/gadgets.html"><strong aria-hidden="true">4.3.</strong> Gadgets</a></li><li><a href="reference/verification.html"><strong aria-hidden="true">4.4.</strong> Verification</a></li></ol></li></ol>
+            <ol class="chapter"><li><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><a href="gettingstarted.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><a href="sha256example.html"><strong aria-hidden="true">3.</strong> Proofing a Hash Pre-Image</a></li><li><a href="concepts.html"><strong aria-hidden="true">4.</strong> ZoKrates Programming Concepts</a></li><li><a href="reference/index.html"><strong aria-hidden="true">5.</strong> ZoKrates Reference</a></li><li><ol class="section"><li><a href="reference/grammar.html"><strong aria-hidden="true">5.1.</strong> Grammar</a></li><li><a href="reference/cli.html"><strong aria-hidden="true">5.2.</strong> CLI</a></li><li><a href="reference/gadgets.html"><strong aria-hidden="true">5.3.</strong> Gadgets</a></li><li><a href="reference/verification.html"><strong aria-hidden="true">5.4.</strong> Verification</a></li></ol></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -560,6 +560,13 @@ In addition we assert the result bit by bit with the hard-coded correct solution
 <p>This project was a hands-on way to introduce you to ZoKrates and an the workflow to develop dApps using zkSNARKs.
 Remember that in this example only two parties have been involved. This special case makes it easy to deal with zkSNARK's trust assumptions: Only Vitor was interested in verifying the claim by Alice, hence he can trust his execution of the setup phase.
 However, in more general use-cases there might be multiple parties interested in verifying he correctness of Alice's statement. For example, in the zero-knowledge based cryptocurrency zCash every node needs to be able to validate the correctness of transactions. In order to generalize the setup phase to these multi-party use-cases a tricky process, commonly referred to as “trusted setup” or &quot;ceremony&quot; needs to be conducted. Currently, ZoKrates doesn't provide support for these types of setups.</p>
+<a class="header" href="#zokrates-programming-concepts" id="zokrates-programming-concepts"><h1>ZoKrates Programming Concepts</h1></a>
+<a class="header" href="#variable" id="variable"><h2>Variable</h2></a>
+<a class="header" href="#types" id="types"><h2>Types</h2></a>
+<a class="header" href="#comments" id="comments"><h2>Comments</h2></a>
+<a class="header" href="#functions" id="functions"><h2>Functions</h2></a>
+<a class="header" href="#control-flow" id="control-flow"><h2>Control Flow</h2></a>
+<a class="header" href="#gadgets" id="gadgets"><h2>Gadgets</h2></a>
 <a class="header" href="#zokrates-reference" id="zokrates-reference"><h1>ZoKrates Reference</h1></a>
 <p>The reference covers the details of various areas of Cargo.</p>
 <ul>
@@ -697,7 +704,7 @@ For example, using <code>web3</code>, a call would look like the following:</p>
 <pre><code class="language-k">Verifier.at(&lt;verifier contract address&gt;).verifyTx(A, A_p, B, B_p, C, C_p, H, K, [...publicInputs, ...outputs])
 </code></pre>
 <p>Where <code>A, ..., K</code> are defined as above (adding brackets and quotes: <code>A = [&quot;0x123&quot;, &quot;0x345&quot;]</code>), <code>publicInputs</code> are the public inputs supplied to witness generation and <code>outputs</code> are the results of the computation.</p>
-<a class="header" href="#gadgets" id="gadgets"><h1>Gadgets</h1></a>
+<a class="header" href="#gadgets-1" id="gadgets-1"><h1>Gadgets</h1></a>
 <p>//TODO: add description of all gadgets available + SHA256 comparison</p>
 <a class="header" href="#verification" id="verification"><h1>Verification</h1></a>
 <p>Passed to the verifier contract, this proof can be checked.
