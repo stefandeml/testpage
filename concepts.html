@@ -72,7 +72,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><a href="gettingstarted.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><a href="sha256example.html"><strong aria-hidden="true">3.</strong> Proofing a Hash Pre-Image</a></li><li><a href="concepts.html" class="active"><strong aria-hidden="true">4.</strong> ZoKrates Programming Concepts</a></li><li><a href="reference/index.html"><strong aria-hidden="true">5.</strong> ZoKrates Reference</a></li><li><ol class="section"><li><a href="reference/grammar.html"><strong aria-hidden="true">5.1.</strong> Grammar</a></li><li><a href="reference/cli.html"><strong aria-hidden="true">5.2.</strong> CLI</a></li><li><a href="reference/gadgets.html"><strong aria-hidden="true">5.3.</strong> Gadgets</a></li><li><a href="reference/verification.html"><strong aria-hidden="true">5.4.</strong> Verification</a></li></ol></li></ol>
+            <ol class="chapter"><li><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><a href="gettingstarted.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><a href="sha256example.html"><strong aria-hidden="true">3.</strong> Proofing a Hash Pre-Image</a></li><li><a href="concepts.html" class="active"><strong aria-hidden="true">4.</strong> ZoKrates Programming Concepts</a></li><li><a href="reference/index.html"><strong aria-hidden="true">5.</strong> ZoKrates Reference</a></li><li><ol class="section"><li><a href="reference/grammar.html"><strong aria-hidden="true">5.1.</strong> Grammar</a></li><li><a href="reference/cli.html"><strong aria-hidden="true">5.2.</strong> CLI</a></li><li><a href="reference/verification.html"><strong aria-hidden="true">5.3.</strong> Verification</a></li></ol></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -138,11 +138,120 @@
                     <main>
                         <a class="header" href="#zokrates-programming-concepts" id="zokrates-programming-concepts"><h1>ZoKrates Programming Concepts</h1></a>
 <a class="header" href="#variables" id="variables"><h2>Variables</h2></a>
+<p>Variables can have any name which does not start with a number. Underscores are not allowed in variable names.</p>
 <a class="header" href="#types" id="types"><h2>Types</h2></a>
+<p>ZoKrates currently exposes three types:</p>
+<a class="header" href="#field" id="field"><h3><code>field</code></h3></a>
+<p>This is the most basic type in ZoKrates, and it represents a positive integer between <code>0</code> and <code>p - 1</code>, where <code>p</code> is a (large) prime number.</p>
+<p>The prime <code>p</code> is set to <code>21888242871839275222246405745257275088548364400416034343698204186575808495616</code> as imposed by the pairing curve supported by Ethereum.</p>
+<p>While <code>field</code> values mostly behave like unsigned integers, there are some things to keep in mind:</p>
+<ul>
+<li>They overflow at p and not some power of 2 and underflow at 0, so that we have:</li>
+</ul>
+<pre><code class="language-zokrates">def main() -&gt; (field):
+    field p_minus_one = 21888242871839275222246405745257275088548364400416034343698204186575808495616
+    0 - 1 == p_minus_one
+    return 1
+</code></pre>
+<a class="header" href="#bool" id="bool"><h3><code>bool</code></h3></a>
+<p>ZoKrates has limited support for booleans, to the extent that they can only be used as the condition in <code>if ... else ... endif</code> expressions.</p>
+<p>You can use them for equality checks, inequality checks and inequality checks between <code>field</code> values.</p>
+<p>Note that while equality checks are cheap, inequality checks should be use wisely as they are orders of magnitude more expensive.</p>
+<a class="header" href="#fieldn" id="fieldn"><h3><code>field[n]</code></h3></a>
+<p>Static arrays of <code>field</code> can be instantiated with a constant size, and their elements can be accessed and updated:</p>
+<pre><code class="language-zokrates">def main() -&gt; (field):
+    field[3] a = [1, 2, 3]
+    a[2] = 4
+    return a[0] + a[2]
+</code></pre>
 <a class="header" href="#comments" id="comments"><h2>Comments</h2></a>
+<p>Comments can be added with double-slashes.</p>
+<pre><code class="language-zokrates">def main() -&gt; (field):
+    field a = 42 // this is an end of line comment
+    // this is a full line comment
+    return a
+</code></pre>
 <a class="header" href="#functions" id="functions"><h2>Functions</h2></a>
+<p>A function has to be declared at the top level before it is called.</p>
+<pre><code class="language-zokrates">def foo() -&gt; (field):
+    return 1
+
+def bar() -&gt; (field):
+    return foo()
+</code></pre>
+<p>A function's signature has to be explicitely provided.
+Functions can return many values simply by providing them as a comma-separated list.</p>
+<pre><code class="language-zokrates">def main() -&gt; (field, field[3]):
+    return 1, [2, 3, 4]
+</code></pre>
+<a class="header" href="#inference" id="inference"><h3>Inference</h3></a>
+<p>When defining a variable as the return value of a function, types are optional:</p>
+<pre><code class="language-zokrates">def foo() -&gt; (field, field):
+    return 21, 42
+
+def main() -&gt; (field):
+    a, b = foo()
+    return 1
+</code></pre>
+<p>If there is an ambiguity, providing the types of some of the assigned variables is necessary.</p>
+<pre><code class="language-zokrates">def foo() -&gt; (field, field[3]):
+    return 1, [2, 3, 4]
+
+def foo() -&gt; (field, field):
+    return 1, 2
+
+def main() -&gt; (field):
+    a, field[3] b = foo()
+    return 1
+</code></pre>
 <a class="header" href="#control-flow" id="control-flow"><h2>Control Flow</h2></a>
-<a class="header" href="#gadgets" id="gadgets"><h2>Gadgets</h2></a>
+<p>ZoKrates provide a single thread of execution with two control flow constructs.</p>
+<a class="header" href="#function-calls" id="function-calls"><h3>Function calls</h3></a>
+<p>Function calls can help make programs clearer and more modular. However, using function calls is not always zero-cost, so deep call chains should be avoided.
+Arguments are always passed by value, so that no side effects inside the callee will be visible to the caller.</p>
+<pre><code class="language-zokrates">def incr(field a) -&gt; (field)
+    a = a + 1
+    return 1
+
+def main() -&gt; (field):
+    field x = 1
+    field res = incr(x)
+    x == 1 // x has not changed
+    return 1
+</code></pre>
+<a class="header" href="#for-loops" id="for-loops"><h3>For loops</h3></a>
+<p>For loops are available with the following syntax:</p>
+<pre><code class="language-zokrates">def main() -&gt; (field):
+    field res = 0
+    for field i in 0..4 do
+        res = res + i
+    endfor
+    return res
+</code></pre>
+<p>The bounds have to be known at compile time, so only constants are allowed.
+For loops have define their own scope.</p>
+<a class="header" href="#standard-library" id="standard-library"><h2>Standard library</h2></a>
+<p>ZoKrates comes with a number of reusable components. For now, these components are:</p>
+<a class="header" href="#sha256" id="sha256"><h3>sha256</h3></a>
+<pre><code class="language-zokrates">import &quot;LIBSNARK/sha256&quot;
+</code></pre>
+<p>A function that takes 512 field elements as inputs, checks that they are all bits, and returns their sha256 hash as 256 field elements.</p>
+<a class="header" href="#sha256compression" id="sha256compression"><h3>sha256compression</h3></a>
+<pre><code class="language-zokrates">import &quot;LIBSNARK/sha256compression&quot;
+</code></pre>
+<p>A function that takes 512 field elements as inputs, checks that they are all bits, and returns the result of applying the sha256 compression function on them. The difference with <code>sha256</code> is that no padding is added at the end of the message, which makes it more efficient but also less compatible with Solidity.</p>
+<a class="header" href="#sha256packed" id="sha256packed"><h3>sha256packed</h3></a>
+<pre><code class="language-zokrates">import &quot;LIBSNARK/sha256packed&quot;
+</code></pre>
+<p>A function that takes 2 field elements as inputs, unpacks each of them to 254 bits (big endian), pads each of them to 256 bits on the left, concatenates them and applies sha256. It then removes the two most significant bits and returns the rest as one field element. The rationale is that one <code>field</code> value can only hold 254 bits due to the size of <code>p</code>.</p>
+<a class="header" href="#pack254" id="pack254"><h3>pack254</h3></a>
+<pre><code class="language-zokrates">import &quot;PACKING/pack254&quot;
+</code></pre>
+<p>Packs 254 field elements as one.</p>
+<a class="header" href="#unpack254" id="unpack254"><h3>unpack254</h3></a>
+<pre><code class="language-zokrates">import &quot;PACKING/unpack254&quot;
+</code></pre>
+<p>Unpacks a field element to 254 field elements.</p>
 
                     </main>
 
