@@ -8,6 +8,10 @@ apt-get install -qq libcurl4-openssl-dev libelf-dev libdw-dev binutils-dev libib
 apt-get install -qq python-minimal git 
 python --version
 
-TAG=$(git describe --tags)
-echo "DER TAG"$TAG
+{ # try
+    TAG=$(git describe --tags) &&
+    echo "DER TAG"$TAG
 
+} || { # catch
+    echo "NoTag"
+}
