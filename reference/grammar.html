@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Comments - ZoKrates</title>
+        <title>Grammar - ZoKrates</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -72,7 +72,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="../introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><a href="../gettingstarted.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><a href="../concepts.html"><strong aria-hidden="true">3.</strong> Programming Concepts</a></li><li><ol class="section"><li><a href="../concepts/variables.html"><strong aria-hidden="true">3.1.</strong> Variables</a></li><li><a href="../concepts/types.html"><strong aria-hidden="true">3.2.</strong> Types</a></li><li><a href="../concepts/functions.html"><strong aria-hidden="true">3.3.</strong> Functions</a></li><li><a href="../concepts/control_flow.html"><strong aria-hidden="true">3.4.</strong> Control flow</a></li><li><a href="../concepts/comments.html" class="active"><strong aria-hidden="true">3.5.</strong> Comments</a></li><li><a href="../concepts/stdlib.html"><strong aria-hidden="true">3.6.</strong> Standard Library</a></li></ol></li><li><a href="../reference/index.html"><strong aria-hidden="true">4.</strong> Reference</a></li><li><ol class="section"><li><a href="../reference/cli.html"><strong aria-hidden="true">4.1.</strong> CLI</a></li><li><a href="../reference/verification.html"><strong aria-hidden="true">4.2.</strong> Verification</a></li></ol></li><li><a href="../sha256example.html"><strong aria-hidden="true">5.</strong> Tutorial: Proof of preimage</a></li></ol>
+            <ol class="chapter"><li><a href="../introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><a href="../gettingstarted.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><a href="../sha256example.html"><strong aria-hidden="true">3.</strong> Proofing a Hash Pre-Image</a></li><li><a href="../concepts.html"><strong aria-hidden="true">4.</strong> ZoKrates Programming Concepts</a></li><li><a href="../reference/index.html"><strong aria-hidden="true">5.</strong> ZoKrates Reference</a></li><li><ol class="section"><li><a href="../reference/grammar.html" class="active"><strong aria-hidden="true">5.1.</strong> Grammar</a></li><li><a href="../reference/cli.html"><strong aria-hidden="true">5.2.</strong> CLI</a></li><li><a href="../reference/verification.html"><strong aria-hidden="true">5.3.</strong> Verification</a></li></ol></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -136,12 +136,84 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="#comments" id="comments"><h2>Comments</h2></a>
-<p>Comments can be added with double-slashes.</p>
-<pre><code class="language-zokrates">def main() -&gt; (field):
-    field a = 42 // this is an end of line comment
-    // this is a full line comment
-    return a
+                        <a class="header" href="#grammar" id="grammar"><h1>Grammar</h1></a>
+<p>The current syntax of ZoKrates is the following</p>
+<pre><code class="language-k">module ZOKRATES-SYNTAX
+    imports DOMAINS-SYNTAX
+
+    syntax Prog ::= Impts FunDecls [klabel(#Prog)] // should not be required, cf https://github.com/kframework/k-legacy/issues/1839
+
+    syntax ImptBody ::= &quot;import&quot; String
+    syntax Alias ::= &quot;as&quot; Id
+    syntax Impt ::= ImptBody [klabel(#Impt)]
+                  | ImptBody Alias [klabel(#AliasedImpt)]
+    syntax Impts ::= List{Impt,&quot;&quot;}
+
+    syntax Id ::= &quot;main&quot; [token]
+
+    syntax Arg ::= Type Id
+                 | &quot;private&quot; Type Id
+
+    syntax Type ::= &quot;field&quot;
+                  | &quot;bool&quot;
+    syntax ReturnTypes ::= List{Type,&quot;,&quot;}
+
+    syntax Args ::= List{Arg,&quot;,&quot;}
+    syntax FunDecl ::= &quot;def&quot; Id &quot;(&quot; Args &quot;)&quot; &quot;-&gt;&quot; &quot;(&quot; ReturnTypes &quot;)&quot; &quot;:&quot; Stmts
+    syntax FunDecls ::= FunDecl
+                      | FunDecl FunDecls                          [right]
+
+    syntax Stmt ::= Assert
+                  | Define
+                  | Declare
+                  | DeclareDefine
+                  | Return
+                  | For
+                  | Destructure
+
+    syntax HintId ::= Id
+                    | Type Id
+
+    syntax HintIds ::= List{HintId,&quot;,&quot;}
+
+    syntax Destructure ::= HintId &quot;,&quot; HintIds &quot;=&quot; FCall
+
+    syntax Stmts ::= List{Stmt,&quot;&quot;}
+
+    syntax Assert ::= Exp &quot;==&quot; Exp
+    syntax Declare ::= Type Id
+    syntax Define ::= Id &quot;=&quot; Exp
+    syntax DeclareDefine ::= Type Id &quot;=&quot; Exp // should be sugar for Declare then Define
+    syntax Return ::= &quot;return&quot; Exps
+    syntax For ::= &quot;for&quot; Type Id &quot;in&quot; Int &quot;..&quot; Int &quot;do&quot; Stmts &quot;endfor&quot;
+
+
+    syntax Exps ::= List{Exp,&quot;,&quot;}          [strict]
+    syntax Exp ::= Int | Bool | Id
+               | &quot;(&quot; Exp &quot;)&quot;             [bracket]
+               &gt; Exp &quot;(&quot; Exps &quot;)&quot;        [strict]
+               &gt; left:
+                 Exp &quot;*&quot; Exp             [strict, left]
+               | Exp &quot;/&quot; Exp             [strict, left]
+               | Exp &quot;**&quot; Exp 		     [strict, left]
+               &gt; left:
+                 Exp &quot;+&quot; Exp             [strict, left]
+               | Exp &quot;-&quot; Exp             [strict, left]
+               | IfElse
+               &gt; non-assoc:
+                 Exp &quot;&lt;&quot; Exp             [strict, non-assoc]
+               | Exp &quot;&lt;=&quot; Exp            [strict, non-assoc]
+               | Exp &quot;&gt;&quot; Exp             [strict, non-assoc]
+               | Exp &quot;&gt;=&quot; Exp            [strict, non-assoc]
+               | Exp &quot;==&quot; Exp            [strict, non-assoc]
+               &gt; IfElse
+               &gt; FCall
+
+    syntax FCall ::= Id &quot;(&quot; Exps &quot;)&quot;
+
+    syntax IfElse ::= &quot;if&quot; Exp &quot;then&quot; Exp &quot;else&quot; Exp &quot;fi&quot;    [strict(1)]
+
+endmodule
 </code></pre>
 
                     </main>
@@ -149,13 +221,13 @@
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
-                            <a rel="prev" href="../concepts/control_flow.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../reference/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
 
                         
-                            <a rel="next" href="../concepts/stdlib.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="../reference/cli.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -167,13 +239,13 @@
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
-                    <a href="../concepts/control_flow.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a href="../reference/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
 
                 
-                    <a href="../concepts/stdlib.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a href="../reference/cli.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 
