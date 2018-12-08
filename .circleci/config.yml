@@ -1,13 +1,14 @@
 version: 2
+
 jobs:
   build:
     docker:
-      - image: debian:stretch
+      - image: rustlang/rust:nightly-slim
     steps:
       - checkout
       - run:
-          name: Greeting
-          command: echo Hello, world.
+          name: Version information
+          command: rustc --version; cargo --version; rustup --versionj
       - run:
           name: Print the Current Time
           command: echo $CIRCLE_TAG
